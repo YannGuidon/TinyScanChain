@@ -25,7 +25,7 @@ These projects have shown that an iHP tile could be filled with more than 1K Res
 
 First look at the projects above.
 
-![](ShiftRegister_latches.png)
+![](ShiftRegister_rs.png)
 
 In this TAP system we don't need the sophisticated demux-mux machinery that splits and merges the full-speed bitstream. Let's keep a rate of one bit per byte (think: SPI!) and a single chain (so far), let's KISS because size matters.
 
