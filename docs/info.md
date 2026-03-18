@@ -31,11 +31,7 @@ In this TAP system we don't need the sophisticated demux-mux machinery that spli
 
 Then take one RSFF made from a couple of sg13g2_a21o_1 (area: 2×12.7) and add some features such as a second FF or another data input.
 
-.
-
-.
-
-.
+![](ScanChainCells.png)
 
 Note: The scan chain has a granularity of 4 steps but only 3 actual data bits. Clock pulses should always be in bursts of 8, each burst provides one bit, so the bits are grouped by 3. So each transaction will consist of sequences of 3 bytes over SPI.
 
