@@ -45,6 +45,12 @@ SC_DOUT      =  32
 DO8          =  64
 Count_Enable = 128
 
+async def clear(dut, flags):
+  dut.uio_in.value = flags
+  await ClockCycles(dut.clk, 1)
+  dut.uio_in.value = flags + SC_RESET
+  await ClockCycles(dut.clk, 1)
+
 async def pulse(dut, flags, pin):
   dut.uio_in.value = flags + pin 
   await ClockCycles(dut.clk, 1)
@@ -71,6 +77,7 @@ async def test_project(dut):
   cocotb.start_soon(clock.start())
 
   # Reset
+
   dut._log.info("Reset")
   dut.ena.value = 1
   dut.ui_in.value = 0
@@ -78,11 +85,14 @@ async def test_project(dut):
   dut.rst_n.value = 0
   await ClockCycles(dut.clk, 2)
 
+  # check LFSR
+  
   dut.rst_n.value = 1
   dut.uio_in.value = Count_Enable + SC_SET
   dut._log.info("Let's see if the LFSR works.")
-  await ClockCycles(dut.clk, 48)
+  await ClockCycles(dut.clk, 43)
 
+  # check avalanche
 
   dut.uio_in.value = SC_SET + SC_DIN
   dut._log.info("LFSR stopped. Does the input value cascade to the output during RESET ?")
@@ -91,41 +101,55 @@ async def test_project(dut):
   assert dut.uio_out.value == SC_DOUT + DO8
   assert dut.uo_out.value == 255
 
-  
   dut.uio_in.value = SC_SET  # restore the cleared value at the output port)
   await ClockCycles(dut.clk, 1)
   #print("dut.uio_out.value = " + str(dut.uio_out.value))
   assert dut.uio_out.value == 0
   assert dut.uo_out.value == 0
 
+  # check capture
 
   dut._log.info("Does the scan chain capture the input data ?")
   dut.ui_in.value = 20 # 00010100
   await pulse(dut, SC_RESET, SC_GET)
-  # sc_dout should be 0 right ?
+  # sc_dout should be 0 here, right ?
+
+  # Flush the chain and fill it with 1, should output 1s after 24*8 cycles
 
   dut._log.info("Dumping the scan chain")
-  # Flush the chain. Fed with 1, should output 1s after 24*8 cycles
-  await pulse8x(dut, 4*8, SC_RESET + SC_DIN)
+  await pulse8x(dut, 3*8, SC_RESET + SC_DIN)
 
   dut._log.info("fill the output port with 1s")
   await pulse(dut, SC_RESET, SC_SET)
+  assert dut.uo_out.value == 255
 
   # it's not possible to "get" when the chain is all-1s
   await pulse(dut, SC_RESET, SC_GET)
+
+  # Flush the chain and fill it with 0, should output 0s after 24*8 cycles
 
   dut._log.info("flush the chain, fill with 0s")
   await pulse8x(dut, 4*8, SC_RESET)
 
   # fill the output port with 0s
   await pulse(dut, SC_RESET, SC_SET)
+  assert dut.uo_out.value == 0
 
   # let the LFSR run again a bit
   dut.uio_in.value = Count_Enable + SC_RESET
   dut._log.info("Let's see if the LFSR works.")
-  await ClockCycles(dut.clk, 48)
+  await ClockCycles(dut.clk, 12)
+
   dut._log.info("Sample more input data")
   dut.ui_in.value = 235 # ~00010100
   await pulse(dut, SC_RESET, SC_GET)
   dut._log.info("flush the chain again, fill with 0s")
   await pulse8x(dut, 4*8, SC_RESET)
+
+  dut.ui_in.value = 0
+  for i in range(0, 8):
+    print (i)
+    dut.ui_in.value[i] = 1
+    await pulse(dut, SC_RESET, SC_GET)
+    dut.ui_in.value[i] = 0
+    await clear(dut, 0)
