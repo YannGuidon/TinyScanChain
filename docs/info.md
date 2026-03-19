@@ -67,7 +67,7 @@ The pins are :
 
 * Count_Enable lets an internal free-running counter count. It is read by the scan chain during a strobe on SC_GET so it must be "frozen" to be sampled.
 
-Pro tip : the GET strobe only sets bits in the scan chain. So you have to strobe RESET low first.
+Pro tip : to save even more space, the GET strobe only sets bits in the scan chain. So you have to strobe RESET low first, which pre-clears the data.
 
 ## Structure of the scan chain :
 
@@ -112,3 +112,19 @@ This is only a first, quick try. There are 2 ways to make it even better:
 * The original DTAP project is half-duplex and defines only 3 or 4 pins : CLK, R/W, with a split or shared serial in and out pin. The SC_GET and SC_SET signals should be controlled internally by a Finite State Machine to reduce the number of pins.
 
 Stay tuned.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
+
+.
