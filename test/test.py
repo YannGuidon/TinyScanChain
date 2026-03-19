@@ -100,7 +100,7 @@ async def test_project(dut):
 
 
   dut._log.info("Does the scan chain capture the input data ?")
-  dut.ui_in.value = 109 # 01101101
+  dut.ui_in.value = 20 # 00010100
   await pulse(dut, SC_RESET, SC_GET)
   # sc_dout should be 1 right ?
 
