@@ -125,13 +125,15 @@ module SC_Quad_In(
 
     input  wire [3:0] Latch,
     input  wire [1:0] SCin,
-    output wire [1:0] SCout
+    output wire [1:0] SCout,
+    output wire [3:0] state_pos
 );
   wire tp1, tp2, tp3, tn1, tn2, tn3;
   SC_RSFF     tmp(.D(SCin[0]), .D_N(SCin[1]), .EN(Latch[3]), .Q(tp1),      .Q_N(tn1));
   SC_RSFF_in  in2(.D(tp1),     .D_N(tn1),     .EN(Latch[2]), .Q(tp2),      .Q_N(tn2),      .Din(Din[2]), .GET(GET));
   SC_RSFF_in  in1(.D(tp2),     .D_N(tn2),     .EN(Latch[1]), .Q(tp3),      .Q_N(tn3),      .Din(Din[1]), .GET(GET));
   SC_RSFF_in  in0(.D(tp3),     .D_N(tn3),     .EN(Latch[0]), .Q(SCout[0]), .Q_N(SCout[1]), .Din(Din[0]), .GET(GET));
+  assign state_pos = { SCout[0], tp3, tp2, tp1 };
 endmodule
 
 module SC_Quad_Out(
@@ -140,11 +142,13 @@ module SC_Quad_Out(
 
     input  wire [3:0] Latch,
     input  wire [1:0] SCin,
-    output wire [1:0] SCout
+    output wire [1:0] SCout,
+    output wire [3:0] state_pos
 );
   wire tp1, tp2, tp3, tn1, tn2, tn3;
   SC_RSFF     tmp (.D(SCin[0]), .D_N(SCin[1]), .EN(Latch[3]), .Q(tp1),      .Q_N(tn1));
   SC_RSFF_out out2(.D(tp1),     .D_N(tn1),     .EN(Latch[2]), .Q(tp2),      .Q_N(tn2),      .Dout(Dout[2]), .SET(SET));
   SC_RSFF_out out1(.D(tp2),     .D_N(tn2),     .EN(Latch[1]), .Q(tp3),      .Q_N(tn3),      .Dout(Dout[1]), .SET(SET));
   SC_RSFF_out out0(.D(tp3),     .D_N(tn3),     .EN(Latch[0]), .Q(SCout[0]), .Q_N(SCout[1]), .Dout(Dout[0]), .SET(SET));
+  assign state_pos = { SCout[0], tp3, tp2, tp1 };
 endmodule
