@@ -29,7 +29,7 @@ module tt_um_YannGuidon_TinyScanChain (
  uio[6]: "DO8"
  uio[7]: "Count_Enable"
 */
-  wire SC_RESET, SC_CLK, SC_GET, SC_SET, SC_DIN, SC_DOUT, DO8, Count_Enable;
+  wire SC_RESET, SC_CLK, SC_GET, SC_SET, SC_DIN, SC_DOUT, Count_Enable;
 
   assign SC_RESET     = uio_in[0];
   assign SC_CLK       = uio_in[1];
@@ -70,6 +70,6 @@ module tt_um_YannGuidon_TinyScanChain (
   assign SC_DOUT = t6[0]; // output only the positive value
   
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, clk, rst_n, t6[1], 1'b0};
+  wire _unused = &{ena, clk, rst_n, t6[1], uio_in[5], uio_in[6], Count_Enable, 1'b0};
 
 endmodule
