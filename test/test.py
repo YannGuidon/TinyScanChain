@@ -103,7 +103,7 @@ async def test_project(dut):
   dut.uio_in.value = SC_RESET
   await ClockCycles(dut.clk, 1)
 
-  pulse8(4, SC_RESET + SC_DIN)
+  await pulse8(4, SC_RESET + SC_DIN)
 
 
 
