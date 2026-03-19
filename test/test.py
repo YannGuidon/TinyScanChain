@@ -45,6 +45,22 @@ SC_DOUT      =  32
 DO8          =  64
 Count_Enable = 128
 
+
+
+async def pulse8(bytes, flags):
+  j = 0
+  while (j < bytes):
+    j = j+1
+    i = 0
+    while (i < 8):   # a whole byte
+      i = i+1
+      dut.uio_in.value = flags + SC_CLK
+      await ClockCycles(dut.clk, 1)
+      dut.uio_in.value = flags
+      await ClockCycles(dut.clk, 1)
+
+
+
 @cocotb.test()
 async def test_project(dut):
   dut._log.info("Start")
@@ -69,22 +85,30 @@ async def test_project(dut):
   dut.uio_in.value = SC_SET + SC_DIN
   dut._log.info("LFSR stopped. Does the input value cascade to the output during RESET ?")
   await ClockCycles(dut.clk, 1)
+  print("dut.uio_in.value = " + int(dut.uio_in.value))
+  #assert dut.uio_in.value == SC_DOUT + DO8
 
   dut.uio_in.value = SC_SET  # restore the cleared value at the output port)
   await ClockCycles(dut.clk, 1)
+  print("dut.uio_in.value = " + int(dut.uio_in.value))
+  #assert dut.uio_in.value == SC_DOUT + DO8
 
-  dut._log.info("Does the scan chain captures the input data ?")
+
+  dut._log.info("Does the scan chain capture the input data ?")
   dut.uio_in.value = SC_RESET + SC_GET
   dut.ui_in.value = 109 # 01101101
   await ClockCycles(dut.clk, 1)
 
+  dut._log.info("Dumping the scan chain")
   dut.uio_in.value = SC_RESET
   await ClockCycles(dut.clk, 1)
 
+  pulse8(4, SC_RESET + SC_DIN)
+
+
+
   #dut.uio_in.value = Count_Enable + SC_GET
   #await ClockCycles(dut.clk, 1)
-
-
 
   # Set the input values you want to test
   #dut.ui_in.value = 20
