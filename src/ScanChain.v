@@ -105,13 +105,13 @@ module SC_RSFF_out(
     input  wire EN,
     input  wire SET,
     output wire Dout,
-    output wire DoutN,
-    output wire Q);
+    output wire Q,
+    output wire Q_N));
   // The scan chain:
   (* keep *) sg13g2_a21oi_1 rssc_neg(.Y(Q_N), .A1(EN), .A2(D  ), .B1(Q  ));
   (* keep *) sg13g2_a21oi_1 rssc_pos(.Y(Q  ), .A1(EN), .A2(D_N), .B1(Q_N));
   // The data latch:
-  wire Q_N;
+  wire DoutN;
   (* keep *) sg13g2_a21oi_1 rsdo_neg(.Y(DoutN), .A1(GET), .A2(Q  ), .B1(Dout ));
   (* keep *) sg13g2_a21oi_1 rsdo_pos(.Y(Dout ), .A1(GET), .A2(Q_N), .B1(DoutN));
 endmodule
