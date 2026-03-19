@@ -70,6 +70,6 @@ module tt_um_YannGuidon_TinyScanChain (
   assign SC_DOUT = t6[0]; // output only the positive value
   
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, clk, rst_n, t6[1] 1'b0};
+  wire _unused = &{ena, clk, rst_n, t6[1], 1'b0};
 
 endmodule
