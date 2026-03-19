@@ -6,6 +6,45 @@ from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles
 
 
+#  # Inputs
+#  ui[0]: "DI0"
+#  ui[1]: "DI1"
+#  ui[2]: "DI2"
+#  ui[3]: "DI3"
+#  ui[4]: "DI4"
+#  ui[5]: "DI5"
+#  ui[6]: "DI6"
+#  ui[7]: "DI7"
+#
+#  # Outputs
+#  uo[0]: "DO0"
+#  uo[1]: "DO1"
+#  uo[2]: "DO2"
+#  uo[3]: "DO3"
+#  uo[4]: "DO4"
+#  uo[5]: "DO5"
+#  uo[6]: "DO6"
+#  uo[7]: "DO7"
+#
+#  # Bidirectional pins
+#  uio[0]: "SC_RESET"
+#  uio[1]: "SC_CLK"
+#  uio[2]: "SC_GET"
+#  uio[3]: "SC_SET"
+#  uio[4]: "SC_DIN"
+#  uio[5]: "SC_DOUT"
+#  uio[6]: "DO8"
+#  uio[7]: "Count_Enable"
+
+SC_RESET     =   1  # asserted by 0, like the general rst pin
+SC_CLK       =   2  # counts on rising edge
+SC_GET       =   4  # pulse high to latch in
+SC_SET       =   8  # pulse high to latch out
+SC_DIN       =  16  # must be ready before SC_CLK rising edge
+SC_DOUT      =  32  
+DO8          =  64
+Count_Enable = 128
+
 @cocotb.test()
 async def test_project(dut):
     dut._log.info("Start")
