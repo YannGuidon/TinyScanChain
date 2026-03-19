@@ -82,6 +82,7 @@ module SC_RSFF(
 endmodule
 
 /* This is an "input" cell, used by the 3 other slots of a quad.
+   Note: it can only set the value, not clear it, so reset the chain before GETting the value.
    area : 9.072 + 14.5152 = 23.5872
 */
 module SC_RSFF_in(
