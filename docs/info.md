@@ -67,6 +67,17 @@ SC_DIN --> 3×3 bits to the output port --> 3×3 bits to the input port --> SC_D
 
 (more to be documented)
 
+## Speed
+
+It's an ASIC so it will be ... fast. The Johnson counter can easily reach 200MHz. It divides the clock by 8 and prevents most risks of setup&hold violations because the pulses do no olverlap. There are very nice topologies that could be implemented...
+
+Then it gets ugly. Experience with the other shift registers (SISO8xx) have shown that
+
+* The synthesiser has no clue what this thing does, or how, and tries to optimise for the wrong parameters.
+
+* Place and route are big offenders. Do it manually or script it.
+
+Anyway, I could reach 800 bits, so a chain of 200 bits would still work pretty well.
 
 ## External hardware
 
@@ -74,8 +85,10 @@ Hook it up to a microcontroller or CPU. Likely a Raspberry Pi. Software will be 
 
 ## What next?
 
-This is only a first, quick try.
+This is only a first, quick try. There are 2 ways to make it even better:
 
-The original DTAP project is half-duplex and defines only 3 or 4 pins : CLK, R/W, with a split or shared serial in and out pin. The SC_GET and SC_SET signals should be controlled internally by a Finite State Machine to reduce the number of pins.
+* Make "macros" that hide the characteristics from the synthesiser's sight and optimise the place&route.
+
+* The original DTAP project is half-duplex and defines only 3 or 4 pins : CLK, R/W, with a split or shared serial in and out pin. The SC_GET and SC_SET signals should be controlled internally by a Finite State Machine to reduce the number of pins.
 
 Stay tuned.
