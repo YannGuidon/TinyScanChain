@@ -51,7 +51,11 @@ The pins are :
 
 * SC_SET is a control signal that transfers the scan chain's value into the auxiliary latch for longer-term storage.
 
-The other pins are extra inputs and outputs that can be probed or externally controlled.
+* DO0 to DO8 are extra output pins that are controlled by the scan chain and updated by a strobe on SC_SET
+
+* DI0 to DI7 are extra input pins that are read into the scan chain during a strobe on SC_GET
+
+* Count_Enable lets an internal free-running counter count. It is read by the scan chain during a strobe on SC_GET so it must be "frozen" to be sampled.
 
 ## Structure of the scan chain :
 
@@ -63,21 +67,25 @@ For speed/convenience,
 
 Thus we have :
 
-SC_DIN --> 3×3 bits to the output port --> 3×3 bits to the input port --> SC_DOUT
+- SC_DIN
+- 3×3 bits to the output port (DO0-DO8)
+- 15-bit counter (controlled by the internal clk and reset, enabled by Count_Enable)
+- 3×3 bits to the input port (DI0-DI7, DI8 set to 1 as marker)
+- SC_DOUT
 
 (more to be documented)
 
 ## Speed
 
-It's an ASIC so it will be ... fast. The Johnson counter can easily reach 200MHz. It divides the clock by 8 and prevents most risks of setup&hold violations because the pulses do no olverlap. There are very nice topologies that could be implemented...
+It's an ASIC so it will be ... fast. The Johnson counter can easily reach 200MHz. It divides the clock by 8 and prevents most risks of setup&hold violations because the pulses do no olverlap, so in fact it could run even faster. There are very nice topologies that could be implemented...
 
 Then it gets ugly. Experience with the other shift registers (SISO8xx) have shown that
 
-* The synthesiser has no clue what this thing does, or how, and tries to optimise for the wrong parameters.
+* The synthesiser has no clue what this thing does, or how, and tries to optimise for the wrong parameters. Asynchronous logic is not its domain of excellence.
 
 * Place and route are big offenders. Do it manually or script it.
 
-Anyway, I could reach 800 bits, so a chain of 200 bits would still work pretty well.
+Anyway, another project has reached a depth of close to 800 bits, so a chain of 200 bits would still work pretty well.
 
 ## External hardware
 
