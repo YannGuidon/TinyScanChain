@@ -16,10 +16,38 @@ module tt_um_YannGuidon_TinyScanChain (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-  // All output pins must be assigned. If not used, assign to 0.
-  assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
-  assign uio_out = 0;
-  assign uio_oe  = 0;
+// Plumbing time...
+
+/*
+ Bidirectional pins
+ uio[0]: "SC_RESET"
+ uio[1]: "SC_CLK"
+ uio[2]: "SC_GET"
+ uio[3]: "SC_SET"
+ uio[4]: "SC_DIN"
+ uio[5]: "SC_DOUT"
+ uio[6]: "DO8"
+ uio[7]: "Count_Enable"
+*/
+  wire SC_RESET, SC_CLK, SC_GET, SC_SET, SC_DIN, SC_DOUT, DO8, Count_Enable;
+
+  assign SC_RESET     = uio_in[0];
+  assign SC_CLK       = uio_in[1];
+  assign SC_GET       = uio_in[2];
+  assign SC_SET       = uio_in[3];
+  assign SC_DIN       = uio_in[4];
+//assign uio_out[5]   = SC_DOUT;
+//assign uio_out[6]   = DO8;
+  assign Count_Enable = uio_in[7];
+
+  wire [8:0] DO;
+  assign uo_out  = DO[7:0];
+  assign uio_out = { 1'b0, DO[8], SC_DOUT, 5'b0 };
+  assign uio_oe  = 8'b01100000;
+
+  // The actual "meat" comes here.
+  wire [3:0] Latch;
+  Johnson8 J8( .CLK(SC_CLK), .RESET(SC_RESET), .Latch(Latch) );
 
   // List all unused inputs to prevent warnings
   wire _unused = &{ena, clk, rst_n, 1'b0};
