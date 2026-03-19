@@ -5,7 +5,7 @@
 // LFSR shifts "right" (down to LSB) with poly 0x95
 // Check the "map" image in /doc
 
-module LFSR8(
+module LFSR8E(
   input wire CLK,
   input wire RESET,
   input wire LFSR_EN,
