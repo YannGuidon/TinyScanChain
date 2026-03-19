@@ -48,10 +48,9 @@ module Johnson8(
 endmodule
 
 
-
 /*
- Just a 4-bit interter-buffer to keep the code size down.
- area : 4 × 5.4432 = 21.778
+ Just a 4-bit interter-buffer
+ area : 4 × 10.8864 = 43.5456
 */
 module Inverters_x4 (
     input  wire [3:0] A,
@@ -62,11 +61,24 @@ module Inverters_x4 (
   (* keep *) sg13g2_inv_4  Amp3(.Y(Y[3]), .A(A[3]));
 endmodule
 
-/* This is just a "delay/temporary" cell,
-   inserted every 4 data cells.
+/*
+ Just a 4-bit non-interter-buffer
+ area : 4 × 14.51520 = 58.0608
+*/
+module Inverters_x4 (
+    input  wire [3:0] A,
+    output wire [3:0] X);
+  (* keep *) sg13g2_buf_4  Amp0(.X(X[0]), .A(A[0]));
+  (* keep *) sg13g2_buf_4  Amp1(.X(X[1]), .A(A[1]));
+  (* keep *) sg13g2_buf_4  Amp2(.X(X[2]), .A(A[2]));
+  (* keep *) sg13g2_buf_4  Amp3(.X(X[3]), .A(A[3]));
+endmodule
+
+
+/* This is just a "delay/temporary" cell, inserted every 4 data cells, so one per quad.
    area : 2 × 9.072 = 18.144
 */
-module SC_RSFF_pos(
+module SC_RSFF(
     input  wire D,
     input  wire D_N,
     input  wire EN,
@@ -74,6 +86,21 @@ module SC_RSFF_pos(
     output wire Q_N);
   (* keep *) sg13g2_a21oi_1 rs_neg(.Y(Q_N), .A1(EN), .A2(D  ), .B1(Q  ));
   (* keep *) sg13g2_a21oi_1 rs_pos(.Y(Q  ), .A1(EN), .A2(D_N), .B1(Q_N));
+endmodule
+
+/* This is an "input" cell, used by the 3 other slots of a quad.
+   area : 9.072 + 14.5152 = 23.5872
+*/
+module SC_RSFF_in(
+    input  wire D,
+    input  wire D_N,
+    input  wire Din,
+    input  wire GET,
+    input  wire EN,
+    output wire Q,
+    output wire Q_N);
+  (* keep *) sg13g2_a21oi_1  rs_neg(.Y(Q_N), .A1(EN), .A2(D  ),                     .B1(Q  ));
+  (* keep *) sg13g2_a221oi_1 rs_pos(.Y(Q  ), .A1(EN), .A2(D_N), .B1(Din), .B2(GET), .C1(Q_N));
 endmodule
 
 
