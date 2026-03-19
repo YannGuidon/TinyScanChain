@@ -103,9 +103,14 @@ async def test_project(dut):
   dut.uio_in.value = SC_RESET
   await ClockCycles(dut.clk, 1)
 
-  # Flush the chain. Fed with 1, should output 1s after 24 cycles
+  # Flush the chain. Fed with 1, should output 1s after 24*8 cycles
   await pulse8(dut, 4*8, SC_RESET + SC_DIN)
+  dut.uio_in.value = SC_RESET + SC_SET 
+  await ClockCycles(dut.clk, 1)
 
+  await pulse8(dut, 4*8, SC_RESET)
+  dut.uio_in.value = SC_RESET + SC_SET 
+  await ClockCycles(dut.clk, 1)
 
 
   #dut.uio_in.value = Count_Enable + SC_GET
