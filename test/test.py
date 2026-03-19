@@ -102,31 +102,30 @@ async def test_project(dut):
   dut._log.info("Does the scan chain capture the input data ?")
   dut.ui_in.value = 20 # 00010100
   await pulse(dut, SC_RESET, SC_GET)
-  # sc_dout should be 1 right ?
+  # sc_dout should be 0 right ?
 
   dut._log.info("Dumping the scan chain")
   # Flush the chain. Fed with 1, should output 1s after 24*8 cycles
   await pulse8x(dut, 4*8, SC_RESET + SC_DIN)
 
-
-  # fill the output port with 1s
+  dut._log.info("fill the output port with 1s")
   await pulse(dut, SC_RESET, SC_SET)
 
-  # see if it works better now ?
+  # it's not possible to "get" when the chain is all-1s
   await pulse(dut, SC_RESET, SC_GET)
 
-
+  dut._log.info("flush the chain, fill with 0s")
   await pulse8x(dut, 4*8, SC_RESET)
-
 
   # fill the output port with 0s
   await pulse(dut, SC_RESET, SC_SET)
 
-  #dut.uio_in.value = SC_RESET + SC_SET 
-  #await ClockCycles(dut.clk, 1)
-  #dut.uio_in.value = Count_Enable + SC_GET
-  #await ClockCycles(dut.clk, 1)
-  # Set the input values you want to test
-  #dut.ui_in.value = 20
-  #dut.uio_in.value = 30
-  # assert dut.uo_out.value == 50
+  # let the LFSR run again a bit
+  dut.uio_in.value = Count_Enable + SC_RESET
+  dut._log.info("Let's see if the LFSR works.")
+  await ClockCycles(dut.clk, 48)
+  dut._log.info("Sample more input data")
+  dut.ui_in.value = 235 # ~00010100
+  await pulse(dut, SC_RESET, SC_GET)
+  dut._log.info("flush the chain again, fill with 0s")
+  await pulse8x(dut, 4*8, SC_RESET)
