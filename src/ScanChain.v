@@ -112,8 +112,8 @@ module SC_RSFF_out(
   (* keep *) sg13g2_a21oi_1 rssc_pos(.Y(Q  ), .A1(EN), .A2(D_N), .B1(Q_N));
   // The data latch:
   wire DoutN;
-  (* keep *) sg13g2_a21oi_1 rsdo_neg(.Y(DoutN), .A1(GET), .A2(Q  ), .B1(Dout ));
-  (* keep *) sg13g2_a21oi_1 rsdo_pos(.Y(Dout ), .A1(GET), .A2(Q_N), .B1(DoutN));
+  (* keep *) sg13g2_a21oi_1 rsdo_neg(.Y(DoutN), .A1(SET), .A2(Q  ), .B1(Dout ));
+  (* keep *) sg13g2_a21oi_1 rsdo_pos(.Y(Dout ), .A1(SET), .A2(Q_N), .B1(DoutN));
 endmodule
 
 // Note : SC_RFF_inout is possible. But not required here yet so I skip.
