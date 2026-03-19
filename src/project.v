@@ -57,7 +57,7 @@ module tt_um_YannGuidon_TinyScanChain (
 
   // Some circuit that has an internal state that can be observed:
   wire [7:0] SomeData;
-  LFSR8E lfsr(.CLK(clk), .RESET(rst_n), .LFSR_EN(Count_Enable), LFSR_STATE(SomeData));
+  LFSR8E lfsr(.CLK(clk), .RESET(rst_n), .LFSR_EN(Count_Enable), .LFSR_STATE(SomeData));
 
   // The scan chain
   wire [1:0] t0, t1, t2, t3, t4, t5, t6, t7, t8;
