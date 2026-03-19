@@ -65,7 +65,7 @@ endmodule
  Just a 4-bit non-interter-buffer
  area : 4 × 14.51520 = 58.0608
 */
-module Inverters_x4 (
+module Buffers_x4 (
     input  wire [3:0] A,
     output wire [3:0] X);
   (* keep *) sg13g2_buf_4  Amp0(.X(X[0]), .A(A[0]));
@@ -103,6 +103,24 @@ module SC_RSFF_in(
   (* keep *) sg13g2_a221oi_1 rs_pos(.Y(Q  ), .A1(EN), .A2(D_N), .B1(Din), .B2(GET), .C1(Q_N));
 endmodule
 
+/* This is an "output" cell, that stores a bit from the scan chain for external use.
+   area : 4 × 9.072 = 36.288
+*/
+module SC_RSFF_out(
+    input  wire D,
+    input  wire D_N,
+    input  wire EN,
+    input  wire SET,
+    output wire Dout,
+    output wire DoutN,
+    output wire Q,
+    output wire Q_N);
+  // The scan chain:
+  (* keep *) sg13g2_a21oi_1 rssc_neg(.Y(Q_N), .A1(EN), .A2(D  ), .B1(Q  ));
+  (* keep *) sg13g2_a21oi_1 rssc_pos(.Y(Q  ), .A1(EN), .A2(D_N), .B1(Q_N));
+  // The data latch:
+  (* keep *) sg13g2_a21oi_1 rsdo_neg(.Y(DoutN), .A1(GET), .A2(Q  ), .B1(Dout ));
+  (* keep *) sg13g2_a21oi_1 rsdo_pos(.Y(Dout ), .A1(GET), .A2(Q_N), .B1(DoutN));
+endmodule
 
-
-
+// Note : SC_RFF_inout is possible. But not required here yet so I skip.
