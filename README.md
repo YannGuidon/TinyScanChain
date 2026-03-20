@@ -14,6 +14,8 @@ But TinyTapout does not provide a JTAG-like interface, you're on your own. So le
 
 The iHP SG13G2 PDK provides A221OI and A21OI gates which solve this problem. It's not JTAG-compatible but it's simple, functional and should not interfere with the main design (if the synthesiser cooperates)
 
+The synthesised circuit has a short chain (24 bits of capacity) which is rated for 80MHz: this amounts to 10M bits per second (due to the internal 8x divider/polyphase asynch clock). That's good enough for intense debugging sessions.
+
 ## Resources
 
 - https://github.com/ygdes/ttihp-HDSISO8 implements a high density shift register / delay line with DLHQ gates (standard latches) and 4-phase non-overlapping clocks.
