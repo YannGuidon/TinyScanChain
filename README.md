@@ -14,7 +14,7 @@ But TinyTapout does not provide a JTAG-like interface, you're on your own. So le
 
 The iHP SG13G2 PDK provides A221OI and A21OI gates which solve this problem. It's not JTAG-compatible but it's simple, functional and should not interfere with the main design (if the synthesiser cooperates)
 
-The synthesised circuit has a short chain (24 bits of capacity) which is rated for 80MHz: this amounts to 10M bits per second (due to the internal 8x divider/polyphase asynch clock). That's good enough for intense debugging sessions.
+The circuit has a short chain (24 bits of capacity) which can be synthesised up to 80MHz: this amounts to 10M bits per second (due to the internal 8x divider/polyphase asynch clock). To cut on the buffer fat, this version is rated at (only) 50MHz, or 6Mbps, which is still good enough for intense debugging sessions.
 
 ## Resources
 
@@ -23,4 +23,4 @@ The synthesised circuit has a short chain (24 bits of capacity) which is rated f
 
 ## What next?
 
-Let's hope it makes it in time to tapeout ! I'll create a suitable FSM later.
+Let's hope it makes it in time to tapeout ! I'll create a suitable FSM later. And then I could make a tool to generate custom scan chains or something. There's a lot to improve but the fundamentals are great.
