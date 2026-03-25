@@ -6,6 +6,8 @@ Let's try some new ideas in real silicon, so I can restart the project [DTAP - D
 
 [Read the documentation for this project](docs/info.md)
 
+[https://app.tinytapeout.com/projects/4049](You can play with this project on the iHP26a tapeout at address 625)
+
 ## What is this Tiny Tapeout tile ?
 
 Tiny Tapeout (https://tinytapeout.com) provides 200µm × 150µm of estate on the iHP 5LM SG13G2 technology. That's about 2K gates at best but you'll still want to spy on them : observability and control are necessary so you need a TAP (Test Access Port) !
